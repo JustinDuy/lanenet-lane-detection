@@ -4,7 +4,7 @@ glog
 easydict
 tensorflow==1.15
 matplotlib
-opencv
+opencv-python
 scikit_learn
 glog
 loguru
