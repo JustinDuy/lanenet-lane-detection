@@ -10,8 +10,6 @@ test LaneNet model on single image
 """
 import argparse
 import os.path as ops
-import sys
-sys.path.append('/content/lanenet-lane-detection/')
 
 import time
 
