@@ -28,7 +28,6 @@ from local_utils.log_util import init_logger
 CFG = parse_config_utils.lanenet_cfg
 LOG = init_logger.get_logger(log_file_name_prefix='lanenet_test')
 
-
 def init_args():
     """
 
@@ -82,6 +81,10 @@ def test_lanenet(image_path, weights_path):
     LOG.info('Start reading image and preprocessing')
     t_start = time.time()
     image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+    mask_out = ops.splitext(image_path)[0] + '_mask.jpg'
+    instance_out = ops.splitext(image_path)[0] + '_instance.jpg'
+    binary_out = ops.splitext(image_path)[0] + '_binary.jpg'
+    image_out = ops.splitext(image_path)[0] + '_out.jpg'
     image_vis = image
     image = cv2.resize(image, (512, 256), interpolation=cv2.INTER_LINEAR)
     image = image / 127.5 - 1.0
@@ -123,7 +126,7 @@ def test_lanenet(image_path, weights_path):
             )
         t_cost = time.time() - t_start
         t_cost /= loop_times
-        LOG.info('Single imgae inference cost time: {:.5f}s'.format(t_cost))
+        LOG.info('Single image inference cost time: {:.5f}s'.format(t_cost))
 
         postprocess_result = postprocessor.postprocess(
             binary_seg_result=binary_seg_image[0],
@@ -135,17 +138,21 @@ def test_lanenet(image_path, weights_path):
         for i in range(CFG.MODEL.EMBEDDING_FEATS_DIMS):
             instance_seg_image[0][:, :, i] = minmax_scale(instance_seg_image[0][:, :, i])
         embedding_image = np.array(instance_seg_image[0], np.uint8)
+        
 
-        plt.figure('mask_image')
+        figure = plt.figure('mask_image')
         plt.imshow(mask_image[:, :, (2, 1, 0)])
-        plt.figure('src_image')
+        figure.savefig(mask_out)
+        figure = plt.figure('src_image')
         plt.imshow(image_vis[:, :, (2, 1, 0)])
-        plt.figure('instance_image')
+        figure.savefig(image_out)
+        figure = plt.figure('instance_image')
         plt.imshow(embedding_image[:, :, (2, 1, 0)])
-        plt.figure('binary_image')
+        figure.savefig(instance_out)
+        figure = plt.figure('binary_image')
         plt.imshow(binary_seg_image[0] * 255, cmap='gray')
-        plt.show()
-
+        figure.savefig(binary_out)
+        #plt.show()
     sess.close()
 
     return
