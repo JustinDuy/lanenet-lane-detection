@@ -49,12 +49,12 @@ MODEL:
 TEST:
     TEST_MODEL: 'model/cityscapes/final'
 TRAIN:
-    MODEL_SAVE_DIR: './model/tusimple/'
-    TBOARD_SAVE_DIR: './tboard/tusimple/'
+    MODEL_SAVE_DIR: '/content/gdrive/MyDrive/model/tusimple/'
+    TBOARD_SAVE_DIR: '/content/gdrive/MyDrive/tboard/tusimple/'
     MODEL_PARAMS_CONFIG_FILE_NAME: "model_train_config.json"
     RESTORE_FROM_SNAPSHOT:
-        ENABLE: False
-        SNAPSHOT_PATH: ''
+        ENABLE: True
+        SNAPSHOT_PATH: '/content/gdrive/MyDrive/model/tusimple/bisenetv2_lanenet/tusimple_train_miou=0.4759.ckpt-32.meta'
     SNAPSHOT_EPOCH: 8
     BATCH_SIZE: 16
     VAL_BATCH_SIZE: 2
